@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pratique des comparatifs – Fiche d'exercices interactive</title>
+  <style>
+    :root {
+      --primary: #1d4ed8;
+      --primary-light: #3b82f6;
+      --correct: #15803d;
+      --correct-bg: #f0fdf4;
+      --incorrect: #b91c1c;
+      --incorrect-bg: #fef2f2;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 16px;
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding-bottom: 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 20px 16px;
+      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      color: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 1rem;
+    }
+
+    .score-box {
+      position: sticky;
+      top: 8px;
+      z-index: 100;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .score-info {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .score-info span {
+      color: var(--primary);
+    }
+
+    .score-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tip {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .tip strong { color: #1e40af; }
+
+    .tip ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+
+    .tip li { margin-bottom: 4px; }
+
+    .exercise {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 22px 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+    }
+
+    .exercise h2 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      color: #1e3a8a;
+    }
+
+    .exercise .instruction {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    .item {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .item label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #334155;
+    }
+
+    .item .prompt {
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 0.98rem;
+      border-left: 3px solid #94a3b8;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      background: #fff;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    input.correct,
+    textarea.correct {
+      border-color: var(--correct);
+      background: var(--correct-bg);
+    }
+
+    input.incorrect,
+    textarea.incorrect {
+      border-color: var(--incorrect);
+      background: var(--incorrect-bg);
+    }
+
+    .short-input {
+      max-width: 180px;
+    }
+
+    .feedback {
+      margin-top: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: none;
+    }
+
+    .feedback.show-correct {
+      display: block;
+      color: var(--correct);
+    }
+
+    .feedback.show-incorrect {
+      display: block;
+      color: var(--incorrect);
+    }
+
+    .correct-answer {
+      display: none;
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: var(--correct-bg);
+      border-left: 4px solid var(--correct);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+      color: #14532d;
+    }
+
+    .correct-answer.visible {
+      display: block;
+    }
+
+    .example-answer {
+      display: none;
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: #f0f9ff;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+      color: #0c4a6e;
+    }
+
+    .example-answer.visible {
+      display: block;
+    }
+
+    .controls {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    button:hover {
+      background: #1e40af;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button.secondary {
+      background: #64748b;
+    }
+
+    button.secondary:hover {
+      background: #475569;
+    }
+
+    button.success {
+      background: var(--correct);
+    }
+
+    button.success:hover {
+      background: #166534;
+    }
+
+    .note {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      header h1 { font-size: 1.4rem; }
+      .score-box { flex-direction: column; align-items: stretch; }
+      .score-actions { justify-content: center; }
+      .exercise { padding: 16px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🇫🇷 Fiche d’exercices interactifs</h1>
+      <p>Les comparatifs : plus… que · aussi… que · moins… que · meilleur / mieux / pire</p>
+    </header>
+
+    <div class="score-box">
+      <div class="score-info">
+        Score : <span id="scoreCorrect">0</span> / <span id="scoreTotal">40</span>
+        <span id="scorePercent" style="font-weight:400; color:#64748b; margin-left:6px;"></span>
+      </div>
+      <div class="score-actions">
+        <button onclick="checkAll()">Vérifier tout</button>
+        <button class="secondary" onclick="revealAll()">Révéler les réponses</button>
+        <button class="secondary" onclick="resetAll()">Réinitialiser</button>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>Rappel des structures :</strong>
+      <ul>
+        <li><strong>Supériorité</strong> : plus + adjectif/adverbe + que · plus de + nom + que</li>
+        <li><strong>Égalité</strong> : aussi + adjectif/adverbe + que · autant de + nom + que · autant + que (après un verbe)</li>
+        <li><strong>Infériorité</strong> : moins + adjectif/adverbe + que · moins de + nom + que</li>
+        <li><strong>Irréguliers</strong> : bon → <em>meilleur</em> · bien → <em>mieux</em> · mauvais → <em>pire</em></li>
+      </ul>
+    </div>
+
+    <!-- ========== EXERCISE 1 ========== -->
+    <section class="exercise" id="ex1">
+      <h2>Exercise 1 – Transformez avec « plus… que »</h2>
+      <p class="instruction">Transformez chaque paire de phrases en utilisant la structure de comparaison de supériorité.</p>
+
+      <div class="item" data-id="1.1">
+        <div class="prompt">1. Elle est grande. Sa sœur est petite.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Elle est plus grande que sa sœur.</div>
+      </div>
+
+      <div class="item" data-id="1.2">
+        <div class="prompt">2. Il a 10 livres. Moi, j’en ai 5.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Il a plus de livres que moi.</div>
+      </div>
+
+      <div class="item" data-id="1.3">
+        <div class="prompt">3. Je marche vite. Tu marches lentement.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Je marche plus vite que toi.</div>
+      </div>
+
+      <div class="item" data-id="1.4">
+        <div class="prompt">4. Ils mangent peu. Vous mangez beaucoup.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Vous mangez plus qu’eux.</div>
+      </div>
+
+      <div class="item" data-id="1.5">
+        <div class="prompt">5. Ce film est bon. L’autre est mauvais.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ce film est meilleur que l’autre.<br><small>(Attention : on ne dit pas « plus meilleur »)</small></div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex1')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex1')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 2 ========== -->
+    <section class="exercise" id="ex2">
+      <h2>Exercise 2 – Transformez avec « aussi… que », « autant de… que » ou « autant que »</h2>
+      <p class="instruction">Utilisez la structure d’égalité adaptée (adjectif, nom ou verbe).</p>
+
+      <div class="item" data-id="2.1">
+        <div class="prompt">1. Il est rapide. Son frère est rapide aussi.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Il est aussi rapide que son frère.</div>
+      </div>
+
+      <div class="item" data-id="2.2">
+        <div class="prompt">2. Nous avons trois chats. Eux aussi.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Nous avons autant de chats qu’eux.</div>
+      </div>
+
+      <div class="item" data-id="2.3">
+        <div class="prompt">3. Tu travailles beaucoup. Elle aussi.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Tu travailles autant qu’elle.</div>
+      </div>
+
+      <div class="item" data-id="2.4">
+        <div class="prompt">4. Cette robe est chère. L’autre aussi.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Cette robe est aussi chère que l’autre.</div>
+      </div>
+
+      <div class="item" data-id="2.5">
+        <div class="prompt">5. Je cours vite. Mon ami aussi.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Je cours aussi vite que mon ami.</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex2')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex2')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 3 ========== -->
+    <section class="exercise" id="ex3">
+      <h2>Exercise 3 – Transformez avec « moins… que » ou « moins de… »</h2>
+      <p class="instruction">Utilisez la structure d’infériorité.</p>
+
+      <div class="item" data-id="3.1">
+        <div class="prompt">1. Il est fort. Moi, je suis plus fort.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Il est moins fort que moi.</div>
+      </div>
+
+      <div class="item" data-id="3.2">
+        <div class="prompt">2. Elle a 3 stylos. J’en ai 10.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Elle a moins de stylos que moi.</div>
+      </div>
+
+      <div class="item" data-id="3.3">
+        <div class="prompt">3. Vous travaillez beaucoup. Ils moins.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ils travaillent moins que vous.</div>
+      </div>
+
+      <div class="item" data-id="3.4">
+        <div class="prompt">4. Ce livre est intéressant. L’autre est plus intéressant.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ce livre est moins intéressant que l’autre.</div>
+      </div>
+
+      <div class="item" data-id="3.5">
+        <div class="prompt">5. Nous mangeons beaucoup. Tu manges peu.</div>
+        <input type="text" placeholder="Écrivez la phrase transformée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Tu manges moins que nous.</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex3')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex3')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 4 ========== -->
+    <section class="exercise" id="ex4">
+      <h2>Exercise 4 – Traduisez ces phrases comparatives en français</h2>
+      <p class="instruction">Traduisez en utilisant les structures de comparaison appropriées.</p>
+
+      <div class="item" data-id="4.1">
+        <div class="prompt">1. She is taller than her sister.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Elle est plus grande que sa sœur.</div>
+      </div>
+
+      <div class="item" data-id="4.2">
+        <div class="prompt">2. We have as many books as them.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Nous avons autant de livres qu’eux.</div>
+      </div>
+
+      <div class="item" data-id="4.3">
+        <div class="prompt">3. I speak better than before.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Je parle mieux qu’avant.</div>
+      </div>
+
+      <div class="item" data-id="4.4">
+        <div class="prompt">4. This café is worse than the other one.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ce café est pire que l’autre.</div>
+      </div>
+
+      <div class="item" data-id="4.5">
+        <div class="prompt">5. They work less than us.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ils travaillent moins que nous.</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex4')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex4')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 5 (free) ========== -->
+    <section class="exercise" id="ex5">
+      <h2>Exercise 5 – Écrivez une phrase pour chaque type de comparaison</h2>
+      <p class="instruction">Utilisez vos propres idées. Il n’y a pas de réponse unique.</p>
+
+      <div class="item">
+        <label>1. Supériorité (plus… que)</label>
+        <input type="text" placeholder="Ex. : Il est plus rapide que moi.">
+        <div class="example-answer">Exemple : Il est plus rapide que moi. / Elle est plus intelligente que son frère.</div>
+      </div>
+
+      <div class="item">
+        <label>2. Égalité (aussi… que / autant…)</label>
+        <input type="text" placeholder="Ex. : Elle est aussi gentille que toi.">
+        <div class="example-answer">Exemple : Elle est aussi gentille que toi. / Nous avons autant d’amis qu’eux.</div>
+      </div>
+
+      <div class="item">
+        <label>3. Infériorité (moins… que)</label>
+        <input type="text" placeholder="Ex. : Je suis moins stressé que lui.">
+        <div class="example-answer">Exemple : Je suis moins stressé que lui. / Ils ont moins de travail que nous.</div>
+      </div>
+
+      <div class="item">
+        <label>4. Irrégulier (bon → meilleur)</label>
+        <input type="text" placeholder="Ex. : Ce gâteau est meilleur que l’autre.">
+        <div class="example-answer">Exemple : Ce gâteau est meilleur que l’autre. / Ce film est meilleur que le précédent.</div>
+      </div>
+
+      <div class="item">
+        <label>5. Irrégulier (bien → mieux)</label>
+        <input type="text" placeholder="Ex. : Il chante mieux que son frère.">
+        <div class="example-answer">Exemple : Il chante mieux que son frère. / Elle parle mieux que moi.</div>
+      </div>
+
+      <div class="controls">
+        <button class="secondary" onclick="revealExercise('ex5')">Voir des exemples</button>
+      </div>
+      <p class="note">Ces réponses sont libres. Les exemples ci-dessus ne sont que des suggestions.</p>
+    </section>
+
+    <!-- ========== EXERCISE 6 ========== -->
+    <section class="exercise" id="ex6">
+      <h2>Exercise 6 – Corrigez les erreurs</h2>
+      <p class="instruction">Chaque phrase contient une erreur de comparaison. Réécrivez-la correctement.</p>
+
+      <div class="item" data-id="6.1">
+        <div class="prompt">1. Il court aussi de vite que son frère.</div>
+        <input type="text" placeholder="Phrase corrigée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Il court aussi vite que son frère.</div>
+      </div>
+
+      <div class="item" data-id="6.2">
+        <div class="prompt">2. Elle est plus belle moi.</div>
+        <input type="text" placeholder="Phrase corrigée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Elle est plus belle que moi.</div>
+      </div>
+
+      <div class="item" data-id="6.3">
+        <div class="prompt">3. Nous avons autant des livres que vous.</div>
+        <input type="text" placeholder="Phrase corrigée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Nous avons autant de livres que vous.</div>
+      </div>
+
+      <div class="item" data-id="6.4">
+        <div class="prompt">4. Ce film est plus bon que l’autre.</div>
+        <input type="text" placeholder="Phrase corrigée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ce film est meilleur que l’autre.</div>
+      </div>
+
+      <div class="item" data-id="6.5">
+        <div class="prompt">5. Tu travailles moins moi.</div>
+        <input type="text" placeholder="Phrase corrigée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Tu travailles moins que moi.</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex6')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex6')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 7 ========== -->
+    <section class="exercise" id="ex7">
+      <h2>Exercise 7 – Traduisez avec « meilleur », « mieux » ou « pire »</h2>
+      <p class="instruction">Choisissez la forme irrégulière correcte selon le contexte (adjectif ou adverbe).</p>
+
+      <div class="item" data-id="7.1">
+        <div class="prompt">1. This pizza is better than yesterday’s.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Cette pizza est meilleure que celle d’hier.</div>
+      </div>
+
+      <div class="item" data-id="7.2">
+        <div class="prompt">2. He sings better than his brother.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Il chante mieux que son frère.</div>
+      </div>
+
+      <div class="item" data-id="7.3">
+        <div class="prompt">3. This book is worse than the first one.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ce livre est pire que le premier.</div>
+      </div>
+
+      <div class="item" data-id="7.4">
+        <div class="prompt">4. I did better than last time.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : J’ai fait mieux que la dernière fois.</div>
+      </div>
+
+      <div class="item" data-id="7.5">
+        <div class="prompt">5. The coffee here is better.</div>
+        <input type="text" placeholder="Traduction…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Le café ici est meilleur.</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex7')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex7')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 8 ========== -->
+    <section class="exercise" id="ex8">
+      <h2>Exercise 8 – Complétez avec « plus », « autant » ou « moins »</h2>
+      <p class="instruction">Choisissez le mot qui correspond au signe indiqué (+, − ou =).</p>
+
+      <div class="item" data-id="8.1">
+        <div class="prompt">1. Il parle _________ vite que toi. (+)</div>
+        <input type="text" class="short-input" placeholder="plus / autant / moins">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : plus</div>
+      </div>
+
+      <div class="item" data-id="8.2">
+        <div class="prompt">2. Nous avons _________ d’amis que vous. (−)</div>
+        <input type="text" class="short-input" placeholder="plus / autant / moins">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : moins</div>
+      </div>
+
+      <div class="item" data-id="8.3">
+        <div class="prompt">3. Elle travaille _________ que lui. (+)</div>
+        <input type="text" class="short-input" placeholder="plus / autant / moins">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : plus</div>
+      </div>
+
+      <div class="item" data-id="8.4">
+        <div class="prompt">4. Tu es _________ intelligent que moi. (−)</div>
+        <input type="text" class="short-input" placeholder="plus / autant / moins">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : moins</div>
+      </div>
+
+      <div class="item" data-id="8.5">
+        <div class="prompt">5. Vous avez _________ de devoirs que nous. (=)</div>
+        <input type="text" class="short-input" placeholder="plus / autant / moins">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : autant</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex8')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex8')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 9 ========== -->
+    <section class="exercise" id="ex9">
+      <h2>Exercise 9 – Remettez les mots dans le bon ordre</h2>
+      <p class="instruction">Formez une phrase comparative correcte avec les mots donnés.</p>
+
+      <div class="item" data-id="9.1">
+        <div class="prompt">1. est / grande / sœur / que / plus / sa / Elle</div>
+        <input type="text" placeholder="Phrase ordonnée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Elle est plus grande que sa sœur.</div>
+      </div>
+
+      <div class="item" data-id="9.2">
+        <div class="prompt">2. vite / il / que / court / moi / moins</div>
+        <input type="text" placeholder="Phrase ordonnée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Il court moins vite que moi.</div>
+      </div>
+
+      <div class="item" data-id="9.3">
+        <div class="prompt">3. avons / autant / livres / que / de / Vous / nous</div>
+        <input type="text" placeholder="Phrase ordonnée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Vous avez autant de livres que nous.</div>
+      </div>
+
+      <div class="item" data-id="9.4">
+        <div class="prompt">4. meilleur / ce / est / gâteau / que / celui-là</div>
+        <input type="text" placeholder="Phrase ordonnée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Ce gâteau est meilleur que celui-là.</div>
+      </div>
+
+      <div class="item" data-id="9.5">
+        <div class="prompt">5. mieux / parle / elle / moi / que</div>
+        <input type="text" placeholder="Phrase ordonnée…">
+        <div class="feedback"></div>
+        <div class="correct-answer">Réponse attendue : Elle parle mieux que moi.</div>
+      </div>
+
+      <div class="controls">
+        <button onclick="checkExercise('ex9')">Vérifier cet exercice</button>
+        <button class="secondary" onclick="revealExercise('ex9')">Révéler</button>
+      </div>
+    </section>
+
+    <!-- ========== EXERCISE 10 (free) ========== -->
+    <section class="exercise" id="ex10">
+      <h2>Exercise 10 – Complétez avec vos propres idées</h2>
+      <p class="instruction">Créez des phrases personnelles. Pas de réponse unique.</p>
+
+      <div class="item">
+        <label>1. Je suis plus __________ que __________.</label>
+        <input type="text" placeholder="Ex. : curieuse / ma sœur">
+        <div class="example-answer">Exemple : Je suis plus curieuse que ma sœur. / Je suis plus sportif que mon frère.</div>
+      </div>
+
+      <div class="item">
+        <label>2. Elle parle aussi __________ que __________.</label>
+        <input type="text" placeholder="Ex. : bien / son frère">
+        <div class="example-answer">Exemple : Elle parle aussi bien que son frère. / Elle parle aussi vite que toi.</div>
+      </div>
+
+      <div class="item">
+        <label>3. Ils ont moins __________ que __________.</label>
+        <input type="text" placeholder="Ex. : d’amis / nous">
+        <div class="example-answer">Exemple : Ils ont moins d’amis que nous. / Ils ont moins de temps que moi.</div>
+      </div>
+
+      <div class="item">
+        <label>4. Tu travailles autant __________.</label>
+        <input type="text" placeholder="Ex. : que moi">
+        <div class="example-answer">Exemple : Tu travailles autant que moi. / Tu travailles autant qu’elle.</div>
+      </div>
+
+      <div class="item">
+        <label>5. Ce livre est meilleur __________.</label>
+        <input type="text" placeholder="Ex. : que le précédent">
+        <div class="example-answer">Exemple : Ce livre est meilleur que le précédent. / Ce livre est meilleur que celui d’hier.</div>
+      </div>
+
+      <div class="controls">
+        <button class="secondary" onclick="revealExercise('ex10')">Voir des exemples</button>
+      </div>
+      <p class="note">Ces réponses sont libres. Les exemples ci-dessus ne sont que des suggestions.</p>
+    </section>
+
+    <footer>
+      <p>Pratique interactive des comparatifs français · Basée sur la fiche d’exercices fournie</p>
+      <p>Astuce : les accents et la ponctuation sont tolérés de façon souple. Essayez d’écrire le plus correctement possible !</p>
+    </footer>
+  </div>
+
+  <script>
+    // Answer key (normalized later)
+    const answers = {
+      "1.1": "Elle est plus grande que sa sœur.",
+      "1.2": "Il a plus de livres que moi.",
+      "1.3": "Je marche plus vite que toi.",
+      "1.4": "Vous mangez plus qu'eux.",
+      "1.5": "Ce film est meilleur que l'autre.",
+
+      "2.1": "Il est aussi rapide que son frère.",
+      "2.2": "Nous avons autant de chats qu'eux.",
+      "2.3": "Tu travailles autant qu'elle.",
+      "2.4": "Cette robe est aussi chère que l'autre.",
+      "2.5": "Je cours aussi vite que mon ami.",
+
+      "3.1": "Il est moins fort que moi.",
+      "3.2": "Elle a moins de stylos que moi.",
+      "3.3": "Ils travaillent moins que vous.",
+      "3.4": "Ce livre est moins intéressant que l'autre.",
+      "3.5": "Tu manges moins que nous.",
+
+      "4.1": "Elle est plus grande que sa sœur.",
+      "4.2": "Nous avons autant de livres qu'eux.",
+      "4.3": "Je parle mieux qu'avant.",
+      "4.4": "Ce café est pire que l'autre.",
+      "4.5": "Ils travaillent moins que nous.",
+
+      "6.1": "Il court aussi vite que son frère.",
+      "6.2": "Elle est plus belle que moi.",
+      "6.3": "Nous avons autant de livres que vous.",
+      "6.4": "Ce film est meilleur que l'autre.",
+      "6.5": "Tu travailles moins que moi.",
+
+      "7.1": "Cette pizza est meilleure que celle d'hier.",
+      "7.2": "Il chante mieux que son frère.",
+      "7.3": "Ce livre est pire que le premier.",
+      "7.4": "J'ai fait mieux que la dernière fois.",
+      "7.5": "Le café ici est meilleur.",
+
+      "8.1": "plus",
+      "8.2": "moins",
+      "8.3": "plus",
+      "8.4": "moins",
+      "8.5": "autant",
+
+      "9.1": "Elle est plus grande que sa sœur.",
+      "9.2": "Il court moins vite que moi.",
+      "9.3": "Vous avez autant de livres que nous.",
+      "9.4": "Ce gâteau est meilleur que celui-là.",
+      "9.5": "Elle parle mieux que moi."
+    };
+
+    // Lenient normalization: lowercase, remove accents, collapse spaces, strip trailing period/apostrophe variants
+    function normalize(str) {
+      if (!str) return "";
+      return str
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")          // remove diacritics
+        .replace(/œ/g, "oe")
+        .replace(/æ/g, "ae")
+        .replace(/[’‘‛‹›]/g, "'")                // normalize apostrophes
+        .replace(/[“”«»]/g, '"')
+        .replace(/\s+/g, " ")
+        .replace(/[.,;:!?]+$/g, "")               // trailing punctuation
+        .replace(/\s*'\s*/g, "'")                 // clean spaces around apostrophe
+        .trim();
+    }
+
+    function checkItem(item) {
+      const id = item.dataset.id;
+      if (!id || !answers[id]) return false;
+
+      const input = item.querySelector("input, textarea");
+      const feedback = item.querySelector(".feedback");
+      const correctDiv = item.querySelector(".correct-answer");
+
+      const userRaw = input.value;
+      const user = normalize(userRaw);
+      const key = normalize(answers[id]);
+
+      // Clear previous state
+      input.classList.remove("correct", "incorrect");
+      feedback.classList.remove("show-correct", "show-incorrect");
+      feedback.style.display = "none";
+
+      if (!user) {
+        feedback.textContent = "Veuillez écrire une réponse.";
+        feedback.classList.add("show-incorrect");
+        feedback.style.display = "block";
+        return false;
+      }
+
+      const isCorrect = user === key;
+
+      if (isCorrect) {
+        input.classList.add("correct");
+        feedback.textContent = "✓ Correct !";
+        feedback.classList.add("show-correct");
+        feedback.style.display = "block";
+      } else {
+        input.classList.add("incorrect");
+        feedback.textContent = "✗ Pas tout à fait. Vérifiez l’orthographe, la structure ou l’ordre des mots.";
+        feedback.classList.add("show-incorrect");
+        feedback.style.display = "block";
+      }
+
+      return isCorrect;
+    }
+
+    function checkExercise(exId) {
+      const section = document.getElementById(exId);
+      if (!section) return;
+      const items = section.querySelectorAll(".item[data-id]");
+      items.forEach(item => checkItem(item));
+      updateScore();
+    }
+
+    function checkAll() {
+      document.querySelectorAll(".item[data-id]").forEach(item => checkItem(item));
+      updateScore();
+      // Scroll to top of score for feedback
+      document.querySelector(".score-box").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function revealExercise(exId) {
+      const section = document.getElementById(exId);
+      if (!section) return;
+
+      // Show answer keys
+      section.querySelectorAll(".correct-answer").forEach(el => {
+        el.classList.add("visible");
+      });
+
+      // Show example answers for free exercises
+      section.querySelectorAll(".example-answer").forEach(el => {
+        el.classList.add("visible");
+      });
+    }
+
+    function revealAll() {
+      document.querySelectorAll(".correct-answer, .example-answer").forEach(el => {
+        el.classList.add("visible");
+      });
+    }
+
+    function resetAll() {
+      // Clear all inputs
+      document.querySelectorAll("input[type='text'], textarea").forEach(input => {
+        input.value = "";
+        input.classList.remove("correct", "incorrect");
+      });
+
+      // Hide feedbacks and answers
+      document.querySelectorAll(".feedback").forEach(fb => {
+        fb.classList.remove("show-correct", "show-incorrect");
+        fb.style.display = "none";
+        fb.textContent = "";
+      });
+
+      document.querySelectorAll(".correct-answer, .example-answer").forEach(el => {
+        el.classList.remove("visible");
+      });
+
+      updateScore();
+    }
+
+    function updateScore() {
+      let correct = 0;
+      let total = 0;
+
+      document.querySelectorAll(".item[data-id]").forEach(item => {
+        const id = item.dataset.id;
+        if (!answers[id]) return;
+        total++;
+        const input = item.querySelector("input, textarea");
+        if (input && normalize(input.value) === normalize(answers[id])) {
+          correct++;
+        }
+      });
+
+      document.getElementById("scoreCorrect").textContent = correct;
+      document.getElementById("scoreTotal").textContent = total;
+
+      const percentEl = document.getElementById("scorePercent");
+      if (total > 0 && correct > 0) {
+        const pct = Math.round((correct / total) * 100);
+        percentEl.textContent = `(${pct} %)`;
+      } else {
+        percentEl.textContent = "";
+      }
+    }
+
+    // Initial score display
+    updateScore();
+
+    // Optional: allow Enter key to check the current exercise (nice UX)
+    document.querySelectorAll("input[type='text']").forEach(input => {
+      input.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const item = this.closest(".item");
+          if (item && item.dataset.id) {
+            checkItem(item);
+            updateScore();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
